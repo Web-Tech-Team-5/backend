@@ -31,10 +31,18 @@ const carSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, ref: 'User',
             required: true
         },
+    rentedFrom: {
+        type: Date,
+        default: null,
+    },
+    rentedTo: {
+        type: Date,
+        default: null,
+    },
 }, {
     timestamps: true
 });
 
-const Car =  mongoose.model('Car', carSchema) || mongoose.models.Car;
+const Car = mongoose.models.Car || mongoose.model('Car', carSchema);
 
 module.exports = Car;
