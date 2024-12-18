@@ -1,6 +1,5 @@
 const Car = require('../../models/car');
 
-
 // Create a new car listing
 const registerCar = async (req, res) => {
     try {
@@ -54,6 +53,30 @@ const getAllCars = async (req, res) => {
     }
 };
 
+// Get all available cars
+const getAllAvailableCars = async (req, res) => {
+    try {
+        const cars = await Car.find({
+            status:"Available",
+        }).populate('soldBy', 'name email role');
+        res.status(200).json({ success: true, cars });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Get all not-available cars
+const getAllNotAvailableCars = async (req, res) => {
+    try {
+        const cars = await Car.find({
+            status:"Not-Available",
+        }).populate('soldBy', 'name email role');
+        res.status(200).json({ success: true, cars });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 //Get car by id
 const getCarById = async (req, res) => {
     try {
@@ -76,7 +99,6 @@ const getCarById = async (req, res) => {
 };
 
 //Update car details
-// Update a car listing
 const updateCar = async (req, res) => {
     try {
         const { id } = req.params;
@@ -120,4 +142,4 @@ const deleteCar = async (req, res) => {
 };
 
 
-module.exports = {registerCar,getAllCars,getCarById,updateCar,deleteCar};
+module.exports = {registerCar,getAllCars,getAllNotAvailableCars,getAllAvailableCars,getCarById,updateCar,deleteCar};
