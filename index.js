@@ -11,6 +11,7 @@ const connectDatabase = require('./config/database');
 
 //route dependencies
 const authRouter = require('./routes/auth-routes');
+const carRouter = require('./routes/car-routes');
 
 //configure .env file
 dotenv.config();
@@ -40,6 +41,7 @@ connectDatabase()
 
 //routes
 app.use('/api/auth', authRouter);
+app.use('/api/car', carRouter);
 
 //set port
 app.set('port', process.env.PORT);
