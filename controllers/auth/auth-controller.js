@@ -8,7 +8,7 @@ const SALT_FACTOR = 10;
 const registerUser = async (req, res) => {
     try {
         //get all required fields
-        const {name, email, password,role} = req.body;
+        const {name,email,password,role} = req.body;
 
         //check whether the required fields are empty
         const fields = [name, email, password, role];
@@ -59,6 +59,7 @@ const registerUser = async (req, res) => {
         //create a local instance of the user
         const newUser = new User({
             name: name,
+            role:role,
             password: hashedPassword,
             email: normalizedEmail,
         });
