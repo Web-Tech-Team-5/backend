@@ -31,15 +31,19 @@ This project follows the **MVC (Model-View-Controller)** design pattern:
 ## Dependencies
 
 - **bcrypt** (`^5.1.1`): A library to help hash passwords securely.
-- **bcryptjs** (`^2.4.3`): A JavaScript implementation of bcrypt for hashing passwords.
-- **body-parser** (`^1.20.3`): Middleware for parsing incoming request bodies before your handlers.
-- **cookie-parser** (`^1.4.6`): Middleware for parsing cookies attached to the client request object.
-- **dotenv** (`^16.4.5`): Loads environment variables from a `.env` file into `process.env`.
-- **express** (`^4.21.0`): A fast, unopinionated, minimalist web framework for Node.js.
-- **jsonwebtoken** (`^9.0.2`): Implements JSON Web Tokens for secure authentication.
-- **mongoose** (`^8.7.0`): An Object Data Modeling (ODM) library for MongoDB and Node.js.
-- **morgan** (`^1.10.0`): HTTP request logger middleware for Node.js.
-- **validator** (`^13.12.0`): A library of string validators and sanitizers.
+- **bcryptjs** (`^2.4.3`): A pure JavaScript version of bcrypt for environments where the native module is not available.
+- **body-parser** (`^1.20.3`): Middleware to parse incoming request bodies in a middleware before handling them.
+- **cookie-parser** (`^1.4.7`): Middleware to parse cookies attached to the client requests.
+- **cors** (`^2.8.5`): Middleware for enabling Cross-Origin Resource Sharing (CORS).
+- **dotenv** (`^16.4.7`): A zero-dependency module to load environment variables from a `.env` file into `process.env`.
+- **express** (`^4.21.2`): A fast, unopinionated, and minimalist web framework for Node.js.
+- **jsonwebtoken** (`^9.0.2`): An implementation of JSON Web Tokens (JWT) for secure token-based authentication.
+- **mongoose** (`^8.8.4`): A MongoDB object modeling tool for Node.js, providing schema-based solutions.
+- **morgan** (`^1.10.0`): A HTTP request logger middleware for Node.js.
+- **node-cron** (`^3.0.3`): A task scheduling library for Node.js to run scheduled tasks.
+- **nodemon** (`^3.1.7`): A utility that monitors for changes in your source code and automatically restarts your server.
+- **razorpay** (`^2.9.5`): A library to integrate Razorpay payment gateway for online transactions.
+- **validator** (`^13.12.0`): A library for string validation and sanitization.
 
 ## How to Install and Run the App
 
