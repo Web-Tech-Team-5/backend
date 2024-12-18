@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 
 //internal dependencies
 const errorHandler = require('./middlewares/error-handler');
@@ -12,6 +13,10 @@ const connectDatabase = require('./config/database');
 //route dependencies
 const authRouter = require('./routes/auth-routes');
 const carRouter = require('./routes/car-routes');
+const paymentRouter = require('./routes/payment-routes');
+
+//jobs dependencies
+const updateCarStatus = require('./jobs/update-car-status');
 
 //configure .env file
 dotenv.config();
@@ -24,6 +29,7 @@ const app = express();
 //parse post request body/form-data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors());
 
 //parse cookies
 app.use(cookieParser());
@@ -42,6 +48,7 @@ connectDatabase()
 //routes
 app.use('/api/auth', authRouter);
 app.use('/api/car', carRouter);
+app.use('/api/payment', paymentRouter);
 
 //set port
 app.set('port', process.env.PORT);
@@ -49,4 +56,5 @@ app.set('port', process.env.PORT);
 //listen to port
 app.listen(app.get('port'), () => {
     console.log(`Server started on port ${app.get('port')}`);
+    updateCarStatus();
 });
