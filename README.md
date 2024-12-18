@@ -50,6 +50,7 @@ This project follows the **MVC (Model-View-Controller)** design pattern:
 - **Clone the repository**: git clone https://github.com/Web-Tech-Team-5/backend
 - **Change directory**: cd backend
 - **Install dependencies**: npm install
+- **Make sure .env is added and configured**: add .env in the project directory
 - **Run the app**: 'npm run dev' in the terminal to run in development mode.
 
 ## Viewing the Database in MongoDB Compass
