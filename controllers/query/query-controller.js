@@ -33,7 +33,7 @@ const postQuery = async (req, res) => {
       question: message,
       contactInfo, // optional
       category, // optional
-      status: 'pending'
+      status: 'pending',
     });
 
     // Save the query to the database
@@ -44,7 +44,7 @@ const postQuery = async (req, res) => {
     // Step 3: Respond with success
     res.status(201).json({
       message: 'Query submitted successfully',
-      query: savedQuery
+      query: savedQuery,
     });
 
   } catch (error) {
@@ -53,6 +53,47 @@ const postQuery = async (req, res) => {
   }
 };
 
+// GET all queries
+const getQueries = async (req, res) => {
+  try {
+    console.log("Fetching queries...");
+    
+    const queries = await Query.find(); // Fetch all queries
+    res.json(queries);
+    // console.log("Queries fetched : " + queries);
+    
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+// PUT - Update query status and response
+const updateQueryStatus = async (req, res) => {
+  const { id } = req.params; // Query ID from URL
+  const { answered, answer, status } = req.body; // Ensure that the `answer` and `status` are being passed
+  
+  const answeredAt = answered ? new Date().toISOString() : null; // Set answeredAt to current time if answered
+
+  try {
+    const updatedQuery = await Query.findByIdAndUpdate(
+      id,
+      { answered, answeredAt, answer, status }, // Update the fields
+      { new: true }
+    );
+
+    if (!updatedQuery) {
+      return res.status(404).json({ message: 'Query not found' });
+    }
+
+    res.json(updatedQuery); // Respond with the updated query
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+
 module.exports = {
-  postQuery
+  postQuery,
+  getQueries,
+  updateQueryStatus
 };
