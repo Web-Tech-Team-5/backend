@@ -27,6 +27,14 @@ const UserSchema = new mongoose.Schema({
         enum: ['admin', 'buyer', 'seller'],
         default: 'buyer',
     },
+     forgotOtp: {
+        type: Number, // Store OTP as a number
+        default: null, // Default is null, which means no OTP assigned
+    },
+    otpExpiration: {
+        type: Date, // Store OTP expiration time
+        default: null, // Default is null, meaning no expiration time
+    }
 }, {
     timestamps: true
 });

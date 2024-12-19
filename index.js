@@ -14,6 +14,7 @@ const connectDatabase = require('./config/database');
 const authRouter = require('./routes/auth-routes');
 const carRouter = require('./routes/car-routes');
 const paymentRouter = require('./routes/payment-routes');
+const queryRouter = require('./routes/query-routes');
 
 //jobs dependencies
 const updateCarStatus = require('./jobs/update-car-status');
@@ -49,6 +50,7 @@ connectDatabase()
 app.use('/api/auth', authRouter);
 app.use('/api/car', carRouter);
 app.use('/api/payment', paymentRouter);
+app.use('/api/query', queryRouter);
 
 //set port
 app.set('port', process.env.PORT);
