@@ -106,6 +106,14 @@ const loginUser = async (req, res) => {
         const {email, password} = req.body;
 
         //check whether the required fields are empty
+
+        if(!email || !password) {
+              return res.status(400).json({
+                success: false,
+                message: 'Please enter the required fields',
+            });
+        }
+
         const fields = [email, password];
 
         if (fields.some(field => !field || (typeof field === "string" && field.trim() === ""))) {
