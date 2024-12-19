@@ -14,7 +14,7 @@ const registerUser = async (req, res) => {
         const fields = [name, email, password, role];
 
         if (fields.some(field => !field || (typeof field === "string" && field.trim() === ""))) {
-            res.status(400).json({
+           return res.status(400).json({
                 success: false,
                 message: 'Please enter the required fields',
             });
