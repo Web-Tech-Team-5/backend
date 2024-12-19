@@ -11,6 +11,14 @@ const registerUser = async (req, res) => {
         const {name,email,password,role} = req.body;
 
         //check whether the required fields are empty
+
+        if(!name || !email || !password || !role) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please enter the required fields',
+            });
+        }
+
         const fields = [name, email, password, role];
 
         if (fields.some(field => !field || (typeof field === "string" && field.trim() === ""))) {
