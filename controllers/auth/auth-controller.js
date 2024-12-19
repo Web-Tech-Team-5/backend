@@ -8,18 +8,18 @@ const SALT_FACTOR = 10;
 const registerUser = async (req, res) => {
     try {
         //get all required fields
-        const {name,email,password,role} = req.body;
+        const {name,email,password,confirmPassword,role} = req.body;
 
         //check whether the required fields are empty
 
-        if(!name || !email || !password || !role) {
+        if(!name || !email || !password || !role || !confirmPassword) {
             return res.status(400).json({
                 success: false,
                 message: 'Please enter the required fields',
             });
         }
 
-        const fields = [name, email, password, role];
+        const fields = [name, email, password,confirmPassword, role];
 
         if (fields.some(field => !field || (typeof field === "string" && field.trim() === ""))) {
            return res.status(400).json({
@@ -51,6 +51,14 @@ const registerUser = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Password must have at least 8 characters and include at least one uppercase letter, one number, and one special character"
+            });
+        }
+
+        //check if the password and confirm password match or not
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Passwords do not match"
             });
         }
 
