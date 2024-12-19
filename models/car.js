@@ -39,6 +39,12 @@ const carSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
+
+    type:{
+        type: String,
+        enum: ['suv', 'sedan','hackbacks','luxury'],
+        default: 'sedan',
+    },
 }, {
     timestamps: true
 });

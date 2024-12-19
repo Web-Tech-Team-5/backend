@@ -4,13 +4,13 @@ const Car = require('../../models/car');
 const registerCar = async (req, res) => {
     try {
         // Destructure required fields from the request body
-        const { make, model, year, mileage, condition, status,soldBy } = req.body;
+        const { make, model, year, mileage, condition, status,soldBy,type } = req.body;
 
         // Check if all required fields are present
-        if (!make || !model || !year || !mileage || !condition ||!soldBy) {
+        if (!make || !model || !year || !mileage || !condition ||!soldBy || !type) {
             return res.status(400).json({
                 success: false,
-                message: 'All fields (make, model, year, mileage, condition) are required.',
+                message: 'All fields (make, model, year, mileage, condition, type, soldBy) are required.',
             });
         }
 
@@ -23,7 +23,7 @@ const registerCar = async (req, res) => {
         }
 
         // Create a new car instance
-        const car = new Car({ make, model, year, mileage, condition, status, soldBy});
+        const car = new Car({ make, model, year, mileage, condition, status, soldBy,type});
 
         // Save the car to the database
         await car.save();
