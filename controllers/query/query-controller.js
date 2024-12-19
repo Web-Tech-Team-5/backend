@@ -13,7 +13,7 @@ const postQuery = async (req, res) => {
 
   try {
     // Step 1: Find the car owner by carId
-    const car = await Car.findById(carId).populate('owner');
+    const car = await Car.findById(carId).select('soldBy');
     if (!car) {
       return res.status(404).json({ error: 'Car not found.' });
     }

@@ -548,6 +548,56 @@ const checkAuth = async (req, res) => {
     });
 };
 
+// Middleware to verify JWT token
+const verifyToken = (req, res, next) => {
+    // Get token from the Authorization header
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Get token after 'Bearer'
+    
+    if (!token) {
+        return res.status(403).json({ message: 'Access denied, token required' });
+    }
+
+    try {
+        // Decode and verify the token
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY); // Use your JWT secret key here
+
+        // Attach the decoded user info to the request object for use in subsequent middleware or routes
+        req.user = decodedToken;
+        next(); // Proceed to the next middleware or route handler
+    } catch (error) {
+        console.error('Error verifying token:', error);
+        return res.status(401).json({ message: 'Invalid or expired token' });
+    }
+};
+
+// Function to get user details using the token data
+const getUserDetails = async (req, res) => {
+    try {
+        // Extract user ID from the decoded token (which was attached to req.user in verifyToken middleware)
+        const userId = req.user.id;
+
+        // Fetch user details from the database using the userId
+        const user = await User.findById(userId).select('-password'); // Don't return the password
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Return the user details (excluding sensitive data like password)
+        res.json({
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            name: user.name,  // Assuming you have a 'name' field in your model
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 // Auth middleware to verify JWT token
 const authMiddleware = async (req, res, next) => {
     const token = req.cookies.token;
@@ -653,5 +703,7 @@ module.exports = {
     checkAuth,
     authMiddleware,
     verifyOTPSent,
-    resetPassword
+    resetPassword,
+    verifyToken,
+    getUserDetails
 };
