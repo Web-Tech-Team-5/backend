@@ -398,7 +398,7 @@ const sendOTP = async (req, res) => {
 
         // Set OTP expiration time (e.g., 10 minutes from now)
         const otpExpiration = new Date();
-        otpExpiration.setMinutes(otpExpiration.getMinutes() + 10); // OTP expires in 10 minutes
+        otpExpiration.setMinutes(otpExpiration.getMinutes() + 5); // OTP expires in 10 minutes
         console.log("OTP Expiration Time:", otpExpiration);
 
         // Update the user's forgotOtp and otpExpiration fields
@@ -629,18 +629,19 @@ const verifyOTPSent = async (req, res) => {
     try {
         // Find the user by email
         const user = await User.findOne({ email });
+        console.log("User found : ", user, " Otp: ", otp);
 
         if (!user) {
             return res.status(404).json({ success: false, message: "No account found with this email." });
         }
 
-        // Check if OTP is present and if it has expired
-        if (!user.forgotOtp || user.forgotOtp !== otp) {
+        // Ensure OTP is compared as a string (or number, based on your storage format)
+        if (!user.forgotOtp || String(user.forgotOtp) !== String(otp)) {
             return res.status(400).json({ success: false, message: "Invalid OTP." });
         }
 
-        // Check OTP expiry
-        const otpExpiryTime = moment(user.forgotOtpExpiration); // Correct field name
+        // Check OTP expiry (ensure the date is in correct format)
+        const otpExpiryTime = moment(user.otpExpiration);
         if (moment().isAfter(otpExpiryTime)) {
             return res.status(400).json({ success: false, message: "OTP has expired." });
         }
@@ -653,6 +654,7 @@ const verifyOTPSent = async (req, res) => {
         res.status(500).json({ success: false, message: "Server error." });
     }
 };
+
 
 // Reset password after OTP verification
 const resetPassword = async (req, res) => {
