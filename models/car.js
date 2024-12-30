@@ -69,6 +69,11 @@ const carSchema = new mongoose.Schema({
     features: {
         type: [String],  // Array of features of the car
         required: true
+    },
+    imageId: {
+        type: String,  // ID of the image associated with the car
+        required: true,
+        unique: true
     }
 }, {
     timestamps: true

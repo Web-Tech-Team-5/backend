@@ -1,61 +1,64 @@
-//external dependencies
 const express = require('express');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const { initGridFS } = require('./utils/gridfs'); // Import GridFS utility
 
-//internal dependencies
+// Internal dependencies
 const errorHandler = require('./middlewares/error-handler');
 const connectDatabase = require('./config/database');
 
-//route dependencies
+// Route dependencies
 const authRouter = require('./routes/auth-routes');
 const carRouter = require('./routes/car-routes');
 const paymentRouter = require('./routes/payment-routes');
 const queryRouter = require('./routes/query-routes');
+const imageRouter = require('./routes/image-routes');
 
-//jobs dependencies
+// Jobs dependencies
 const updateCarStatus = require('./jobs/update-car-status');
 
-//configure .env file
+// Configure .env file
 dotenv.config();
 
-//create server
+// Create server
 const app = express();
 
-//use middlewares
-
-//parse post request body/form-data
+// Use middlewares
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cors());
-
-//parse cookies
 app.use(cookieParser());
-
-//logger
 app.use(morgan('dev'));
 
-//final error handler
+// Final error handler
 app.use(errorHandler);
 
-//connect to database
+// Connect to the database and initialize GridFS
 connectDatabase()
-    .then(() =>
-        console.log(`Connected to MONGODB database successfully!`));
+    .then(() => {
+        console.log('Connected to MongoDB database successfully!');
+        initGridFS(); // Initialize GridFS after DB connection
+    })
+    .catch((err) => {
+        console.error('Database connection failed:', err);
+        process.exit(1);  // Exit if the DB connection fails
+    });
 
-//routes
+// Routes
 app.use('/api/auth', authRouter);
 app.use('/api/car', carRouter);
 app.use('/api/payment', paymentRouter);
 app.use('/api/query', queryRouter);
+app.use('/api/image', imageRouter);
 
-//set port
-app.set('port', process.env.PORT);
+// Set port
+app.set('port', process.env.PORT || 5000);
 
-//listen to port
+// Listen to port
 app.listen(app.get('port'), () => {
     console.log(`Server started on port ${app.get('port')}`);
     updateCarStatus();

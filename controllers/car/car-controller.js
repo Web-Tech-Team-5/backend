@@ -151,13 +151,13 @@ const User = require('../../models/user'); // Ensure you have a User model if yo
 const registerCar = async (req, res) => {
     try {
         // Destructure required fields from the request body
-        const { make, model, year, mileage, condition, status, soldBy, type, price, rating } = req.body;
-
+        const { make, model, year, mileage, condition, status, soldBy, type, price, rating, description, location, contact, features , imageId } = req.body;
+        console.log(req.body);
         // Check if all required fields are present
-        if (!make || !model || !year || !mileage || !condition || !status || !soldBy || !type || !price || !rating) {
+        if (!make || !model || !year || !mileage || !condition || !status || !soldBy || !type || !price || !rating || !description || !imageId || !location || !contact || !features) {
             return res.status(400).json({
                 success: false,
-                message: 'All fields (make, model, year, mileage, condition, status, soldBy, type, price, rating) are required.',
+                message: 'All fields are required.',
             });
         }
 
@@ -177,11 +177,54 @@ const registerCar = async (req, res) => {
                 message: 'User not found for the provided soldBy ID.',
             });
         }
+        console.log(user);
+
+        // Validate 'status' and 'type'
+        const validStatuses = ['Available', 'Not-Available'];
+        const validTypes = ['suv', 'sedan', 'hatchbacks', 'luxury'];
+
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid status. It should be either "Available" or "Not-Available".',
+            });
+        }
+
+        if (!validTypes.includes(type)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid type. It should be one of "suv", "sedan", "hatchbacks", or "luxury".',
+            });
+        }
+
+        // Ensure features is an array
+        if (!Array.isArray(features)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Features should be an array.',
+            });
+        }
 
         // Create a new car instance with all required fields
         const car = new Car({
-            make, model, year, mileage, condition, status, soldBy, type, price, rating
+            make,
+            model,
+            year,
+            mileage,
+            condition,
+            status,
+            soldBy,
+            type,
+            price,
+            rating,
+            description,
+            location,
+            contact,
+            features,
+            imageId,
         });
+
+        console.log(car);
 
         // Save the car to the database
         await car.save();
@@ -199,6 +242,7 @@ const registerCar = async (req, res) => {
         });
     }
 };
+
 
 // Get all cars
 const getAllCars = async (req, res) => {
