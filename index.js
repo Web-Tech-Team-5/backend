@@ -54,7 +54,10 @@ app.use('/api/payment', paymentRouter);
 app.set('port', process.env.PORT);
 
 //listen to port
-app.listen(app.get('port'), () => {
-    console.log(`Server started on port ${app.get('port')}`);
-    updateCarStatus();
-});
+if(process.env.NODE_ENV !== 'test') {
+    app.listen(app.get('port'), () => {
+        console.log(`Server started on port ${app.get('port')}`);
+        updateCarStatus();
+    });
+}
+module.exports = app;
